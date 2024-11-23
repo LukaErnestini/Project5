@@ -32,6 +32,114 @@
 $ pnpm install
 ```
 
+### Database Setup
+
+The project uses SQLite with Prisma ORM. Here's how to set it up:
+
+a. Create `.env` file in the `backend` directory:
+
+```bash
+echo "DATABASE_URL=\"file:./dev.db\"" > .env
+```
+
+b. Initialize the database:
+
+```bash
+npx prisma generate    # Generates Prisma Client
+npx prisma db push     # Creates/updates database schema
+```
+
+What these commands do:
+
+- `prisma generate`: Creates type-safe database client
+- `prisma db push`: Syncs your database schema with your Prisma schema
+
+c. (Optional) Explore your database with Prisma Studio:
+
+```bash
+npx prisma studio
+```
+
+This opens a browser interface at http://localhost:5555 where you can view and edit your data.
+
+### Understanding Key Files
+
+1. **schema.prisma**:
+   This file defines your database structure. Example schema:
+
+   ```prisma
+   generator client {
+     provider = "prisma-client-js"
+   }
+
+   datasource db {
+     provider = "sqlite"
+     url      = env("DATABASE_URL")
+   }
+
+   model User {
+     id        Int      @id @default(autoincrement())
+     email     String   @unique
+     name      String?
+     createdAt DateTime @default(now())
+     updatedAt DateTime @updatedAt
+   }
+   ```
+
+2. **PrismaService**:
+   Located at `backend/src/prisma/prisma.service.ts`, this service manages database connections.
+
+3. **Environment Variables**:
+   The `.env` file in backend directory contains:
+   ```
+   DATABASE_URL="file:./dev.db"
+   ```
+
+### Common Development Tasks
+
+1. **Creating a New Database Model**:
+   a. Add model to `schema.prisma`
+   b. Run `npx prisma db push`
+   c. Run `npx prisma generate`
+
+2. **Viewing Database Content**:
+
+   ```bash
+   npx prisma studio
+   ```
+
+3. **Resetting Database**:
+   ```bash
+   npx prisma db push --force-reset
+   ```
+   Warning: This deletes all data!
+
+### Troubleshooting Common Issues
+
+1. **"Prisma Client is not generated"**:
+
+   ```bash
+   cd backend
+   npx prisma generate
+   ```
+
+2. **"Database file not found"**:
+
+   - Check if `.env` file exists
+   - Verify DATABASE_URL is correct
+   - Run `npx prisma db push`
+
+3. **"Cannot find module '@prisma/client'"**:
+   ```bash
+   cd backend
+   pnpm install
+   npx prisma generate
+   ```
+
+### API Documentation
+
+Once the backend is running, visit http://localhost:3000/api to view the Swagger documentation.
+
 ## Compile and run the project
 
 ```bash
