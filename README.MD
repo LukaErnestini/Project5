@@ -12,7 +12,8 @@ A web application for managing and sharing items within a community. Users can l
 ## Project Structure
 
 ├── frontend/ # Angular application
-└── backend/ # NestJS application
+├── backend/ # NestJS application
+└── database/ # sqlite
 
 ## Development Setup
 
@@ -44,8 +45,8 @@ pnpm run start:dev
 
 ```bash
 cd frontend
-npm install
-ng serve
+pnpm install
+pnpm start
 ```
 
 ## CI/CD Strategy
@@ -55,9 +56,3 @@ ng serve
   - `staging`
   - `dev`
   - Feature branches should branch from `dev`
-
-For local CI/CD, we can use Jenkins in Docker
-
-```bash
-docker run -p 8080:8080 -p 50000:50000 jenkins/jenkins:lts
-```
